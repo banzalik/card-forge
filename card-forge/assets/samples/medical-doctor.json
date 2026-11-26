@@ -1,0 +1,32 @@
+{
+  "template": "medical-doctor",
+  "branding": { "primaryColor": "#064E3B", "accentColor": "#10B981", "textColor": "#FFFFFF" },
+  "front": {
+    "issuerName": "Lakeview Health Partners",
+    "subtitle": "Member Health ID",
+    "holderName": "Sam K. Patel",
+    "idNumber": "LHP884210337",
+    "effectiveDate": "2026-01-01",
+    "expirationDate": "2026-12-31",
+    "fields": [
+      { "key": "group", "label": "Group #", "value": "GRP-20931" },
+      { "key": "plan", "label": "Plan", "value": "PPO Silver" },
+      { "key": "pcp", "label": "PCP", "value": "Dr. Alex Moreno, MD" },
+      { "key": "copay", "label": "Copay PCP / Spec / ER", "value": "$25 / $50 / $250" }
+    ]
+  },
+  "back": {
+    "header": "Member & Provider Information",
+    "contacts": [
+      { "label": "Member Services", "value": "1-800-555-0123" },
+      { "label": "24/7 Nurse Line", "value": "1-800-555-0177" }
+    ],
+    "fields": [
+      { "label": "RxBIN", "value": "610014" },
+      { "label": "RxPCN", "value": "LHPRX" },
+      { "label": "RxGRP", "value": "LHP2093" }
+    ],
+    "legalNotice": "Possession of this card does not guarantee eligibility. Verify coverage at lakeview.example/verify. In an emergency call 911.",
+    "barcode": { "format": "QR", "value": "https://lakeview.example/verify/LHP884210337" }
+  }
+}
