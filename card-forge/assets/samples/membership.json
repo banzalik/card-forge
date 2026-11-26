@@ -1,0 +1,27 @@
+{
+  "template": "membership-loyalty",
+  "branding": { "primaryColor": "#7C2D12", "accentColor": "#F59E0B", "textColor": "#FFFFFF" },
+  "front": {
+    "issuerName": "Ridgeline Climbing Club",
+    "subtitle": "Gold Member",
+    "holderName": "Morgan Lee",
+    "idNumber": "RCC-000981",
+    "effectiveDate": "2024-03-15",
+    "expirationDate": "2027-03-15",
+    "fields": [
+      { "key": "tier", "label": "Tier", "value": "Gold" },
+      { "key": "home", "label": "Home Gym", "value": "Ballard" }
+    ]
+  },
+  "back": {
+    "header": "Member Benefits",
+    "showMagStripe": true,
+    "showSignatureStrip": true,
+    "fields": [
+      { "label": "Hours", "value": "Mon–Fri 6a–11p · Sat–Sun 8a–9p" },
+      { "label": "Benefits", "value": "Unlimited entry · 2 guest passes/mo · 10% retail" }
+    ],
+    "legalNotice": "Non-transferable. Present at front desk. Subject to club terms of use.",
+    "barcode": { "format": "CODE128", "value": "RCC000981" }
+  }
+}

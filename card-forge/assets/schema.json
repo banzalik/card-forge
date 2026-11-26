@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardforge.dev/schema/card.json",
+  "title": "CardForge Double-Sided Card Payload",
+  "type": "object",
+  "required": ["template", "front", "back"],
+  "properties": {
+    "template": {
+      "type": "string",
+      "enum": ["auto-insurance", "medical-doctor", "membership-loyalty", "generic-id"]
+    },
+    "branding": {
+      "type": "object",
+      "properties": {
+        "primaryColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "default": "#0F172A" },
+        "accentColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "default": "#2563EB" },
+        "textColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "default": "#FFFFFF" },
+        "logoPath": { "type": "string" },
+        "iconPath": { "type": "string" },
+        "photoPath": { "type": "string" }
+      }
+    },
+    "front": {
+      "type": "object",
+      "required": ["issuerName", "holderName", "idNumber"],
+      "properties": {
+        "issuerName": { "type": "string", "minLength": 1 },
+        "subtitle": { "type": "string" },
+        "holderName": { "type": "string", "minLength": 1 },
+        "idNumber": { "type": "string", "minLength": 1 },
+        "effectiveDate": { "type": "string", "format": "date" },
+        "expirationDate": { "type": "string", "format": "date" },
+        "fields": {
+          "type": "array",
+          "maxItems": 6,
+          "items": { "$ref": "#/$defs/field" }
+        }
+      }
+    },
+    "back": {
+      "type": "object",
+      "properties": {
+        "header": { "type": "string" },
+        "showMagStripe": { "type": "boolean", "default": false },
+        "showSignatureStrip": { "type": "boolean", "default": false },
+        "contacts": { "type": "array", "items": { "$ref": "#/$defs/field" } },
+        "fields": { "type": "array", "items": { "$ref": "#/$defs/field" } },
+        "legalNotice": { "type": "string" },
+        "barcode": {
+          "type": "object",
+          "required": ["format", "value"],
+          "properties": {
+            "format": { "type": "string", "enum": ["PDF417", "QR", "CODE128"] },
+            "value": { "type": "string", "minLength": 1 },
+            "altText": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "required": ["label", "value"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$" },
+        "label": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    }
+  }
+}

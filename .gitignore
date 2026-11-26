@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+dist/
+web/node_modules/
+web/dist/
+.env
+certs/
+*.pem
+*.key
+*.p12

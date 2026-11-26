@@ -1,0 +1,25 @@
+{
+  "template": "generic-id",
+  "branding": { "primaryColor": "#1E3A8A", "accentColor": "#38BDF8", "textColor": "#FFFFFF" },
+  "front": {
+    "issuerName": "Northgate Makerspace",
+    "subtitle": "Volunteer Staff",
+    "holderName": "Riley Chen",
+    "idNumber": "NGM-V-0042",
+    "effectiveDate": "2026-09-01",
+    "expirationDate": "2027-08-31",
+    "fields": [
+      { "key": "role", "label": "Role", "value": "Shop Steward" },
+      { "key": "access", "label": "Access", "value": "Wood · Metal · Laser" }
+    ]
+  },
+  "back": {
+    "header": "If found, please return",
+    "contacts": [
+      { "label": "Front desk", "value": "(206) 555-0110" },
+      { "label": "Email", "value": "desk@northgate.example" }
+    ],
+    "legalNotice": "Property of Northgate Makerspace. Badge must be visible while on premises.",
+    "barcode": { "format": "QR", "value": "https://northgate.example/badge/NGM-V-0042" }
+  }
+}

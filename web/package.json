@@ -1,0 +1,14 @@
+{
+  "name": "cardforge-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static CardForge designer for GitHub Pages",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs && python3 -m http.server 8000 --directory dist"
+  },
+  "dependencies": {
+    "bwip-js": "4.11.4"
+  }
+}

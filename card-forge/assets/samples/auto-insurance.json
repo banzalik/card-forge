@@ -1,0 +1,27 @@
+{
+  "template": "auto-insurance",
+  "branding": { "primaryColor": "#0F172A", "accentColor": "#2563EB", "textColor": "#FFFFFF" },
+  "front": {
+    "issuerName": "Evergreen Mutual Insurance",
+    "subtitle": "Automobile Insurance Identification Card",
+    "holderName": "Jordan A. Rivera",
+    "idNumber": "EMA-4471-2290-03",
+    "effectiveDate": "2026-07-01",
+    "expirationDate": "2027-01-01",
+    "fields": [
+      { "key": "naic", "label": "NAIC #", "value": "12345" },
+      { "key": "vehicle", "label": "Vehicle", "value": "2023 Subaru Outback" },
+      { "key": "vin", "label": "VIN", "value": "4S4BTANC5P3123456" },
+      { "key": "agent", "label": "Agent", "value": "Pat Lee · (206) 555-0142" }
+    ]
+  },
+  "back": {
+    "header": "In Case of Accident",
+    "contacts": [
+      { "label": "24/7 Claims", "value": "1-800-555-0100" },
+      { "label": "Roadside Assistance", "value": "1-800-555-0199" }
+    ],
+    "legalNotice": "This card must be carried in the insured vehicle for production upon demand. It is not a contract of insurance. Report all accidents to your insurer promptly.",
+    "barcode": { "format": "PDF417", "value": "EMA-4471-2290-03|RIVERA/JORDAN|20260701|20270101|4S4BTANC5P3123456", "altText": "EMA-4471-2290-03" }
+  }
+}
