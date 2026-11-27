@@ -112,6 +112,7 @@ def cmd_generate(a) -> int:
     if "pdf" in formats:
         extra = [a.input, "--mode", a.mode, "--out", a.out, *tpl]
         extra += ["--bleed" if a.bleed else "--no-bleed"]
+        extra += ["--cut-lines" if a.cut_lines else "--no-cut-lines"]
         rc |= render.main(_render_args(a, extra))
     if "pkpass" in formats:
         rc |= build_pkpass.main([a.input, "--out", a.out, *tpl])
@@ -196,7 +197,8 @@ def make_handler(static_dir: Path | None):
                     args = [str(src), "--out", str(tmpdir), "--name", "cards",
                             "--paper", str(opts.get("paper", "letter")), "--per-page", str(opts.get("perPage", 8)),
                             "--flip", str(opts.get("flip", "long-edge")), "--mode", str(opts.get("mode", "copies")),
-                            "--offset-x", str(float(opts.get("offsetX", 0))), "--offset-y", str(float(opts.get("offsetY", 0)))]
+                            "--offset-x", str(float(opts.get("offsetX", 0))), "--offset-y", str(float(opts.get("offsetY", 0))),
+                            "--cut-lines" if opts.get("cutLines", True) else "--no-cut-lines"]
                     try:
                         render.main(args)
                     except SystemExit as e:  # argparse rejected an option
@@ -255,6 +257,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--format", default="pdf", choices=["pdf", "pkpass", "gwallet", "all"])
     p.add_argument("--mode", default="batch", choices=["batch", "copies"])
     p.add_argument("--bleed", action=argparse.BooleanOptionalAction, default=True)
+    p.add_argument("--cut-lines", action=argparse.BooleanOptionalAction, default=True,
+                   help="Dashed full-length cut lines on the front sheet (default on)")
     p.add_argument("--out", default="dist")
     _sheet_opts(p)
     p.set_defaults(fn=cmd_generate)

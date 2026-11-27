@@ -7,7 +7,7 @@ const STORE = "cardforge.v1";
 const state = { records: [], index: 0, api: false };
 
 // ------------------------------------------------------------------ settings
-const settingIds = ["paper", "perPage", "mode", "flip", "offsetX", "offsetY", "bleed", "crops", "guides"];
+const settingIds = ["paper", "perPage", "mode", "flip", "offsetX", "offsetY", "bleed", "crops", "cuts", "guides"];
 function settings() {
   return {
     paper: $("paper").value,
@@ -18,6 +18,7 @@ function settings() {
     offsetY: Number($("offsetY").value) || 0,
     bleed: $("bleed").checked,
     crops: $("crops").checked,
+    cuts: $("cuts").checked,
     guides: $("guides").checked,
   };
 }
@@ -102,7 +103,7 @@ function update() {
   const s = settings();
   const imp = currentImposition();
   $("warnings").innerHTML = imp.warnings.map((w) => `<li>${w.replace(/[<>&]/g, "")}</li>`).join("");
-  const sheets = records.length ? buildSheets(records, imp, { mode: s.mode, cropMarks: s.crops, guides: s.guides }) : [];
+  const sheets = records.length ? buildSheets(records, imp, { mode: s.mode, cropMarks: s.crops, cutLines: s.cuts, guides: s.guides }) : [];
   const wrap = $("sheets");
   wrap.replaceChildren();
   sheets.forEach((sh, i) => {

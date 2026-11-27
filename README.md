@@ -94,6 +94,10 @@ rather than silently changed:
   crop marks that do not fit are omitted. Use 8-up for desktop printers.
 - **Crop marks** sit on the sheet perimeter, aligned to each trim line. Marks between cards
   would print over the neighbouring bleed.
+- **Cut lines:** perimeter marks end up on the offcuts after the first cut, so the front sheet
+  also gets thin dashed lines across the whole page through every trim line. They follow card
+  edges and gutters only, never a card face. They are on by default; turn them off with
+  `--no-cut-lines` (CLI), `"cutLines": false` (API) or the *Cut lines* checkbox (designer).
 - **Apple Wallet:** generic passes show at most 4 auxiliary fields, so `front.fields` beyond 4
   move to `backFields`. Colours are emitted as `rgb()`, and the barcode format follows
   `back.barcode.format` instead of always PDF417.
