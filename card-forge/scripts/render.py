@@ -198,6 +198,25 @@ def _crop_marks(imp: dict, which: str) -> str:
     return "".join(out)
 
 
+def _cut_lines(imp: dict, which: str) -> str:
+    """Dashed hairlines across the whole sheet through every trim line.
+
+    Perimeter crop marks end up on the offcuts after the first cut; these lines run the full width
+    and height of the sheet, so every strip still carries the marks for the next cut. They follow
+    card edges and gutters only and never cross a card face.
+    """
+    pw, ph = imp["paper"]["width_mm"], imp["paper"]["height_mm"]
+    xs, ys = set(), set()
+    for s in imp["slots"]:
+        pos = s[which]
+        xs.update((round(pos["x_mm"], 3), round(pos["x_mm"] + CR80_W, 3)))
+        ys.update((round(pos["y_mm"], 3), round(pos["y_mm"] + CR80_H, 3)))
+    lines = [f'<line x1="{x:.3f}" y1="0" x2="{x:.3f}" y2="{ph}"/>' for x in sorted(xs)]
+    lines += [f'<line x1="0" y1="{y:.3f}" x2="{pw}" y2="{y:.3f}"/>' for y in sorted(ys)]
+    return (f'<svg class="cutlines" xmlns="http://www.w3.org/2000/svg" width="{pw}mm" height="{ph}mm" '
+            f'viewBox="0 0 {pw} {ph}"><g fill="none" stroke="#8a8a8a" stroke-width="0.06" stroke-dasharray="1.2 1">{"".join(lines)}</g></svg>')
+
+
 def _doc(imp: dict, sheets: list[str], title: str) -> str:
     pw, ph = imp["paper"]["width_mm"], imp["paper"]["height_mm"]
     css = f"@page {{ size: {pw}mm {ph}mm; margin: 0; }}\n:root {{ --pw: {pw}mm; --ph: {ph}mm; }}\n" + CSS_PATH.read_text(encoding="utf-8")
@@ -207,7 +226,7 @@ def _doc(imp: dict, sheets: list[str], title: str) -> str:
     )
 
 
-def build_sheets(cards: list[dict], imp: dict, mode: str, crop_marks: bool, guides: bool) -> str:
+def build_sheets(cards: list[dict], imp: dict, mode: str, crop_marks: bool, guides: bool, cut_lines: bool = True) -> str:
     per_page = imp["grid"]["perPage"]
     cols, rows = imp["grid"]["cols"], imp["grid"]["rows"]
     eff = imp["card"]["effectiveBleed_mm"]
@@ -228,6 +247,7 @@ def build_sheets(cards: list[dict], imp: dict, mode: str, crop_marks: bool, guid
             fronts.append(_slot(fpos["x_mm"], fpos["y_mm"], fb, front_html(card, fb), guides))
             backs.append(_slot(bpos["x_mm"], bpos["y_mm"], bb, back_html(card, bb), guides))
         fcrop = _crop_marks(imp, "front") if crop_marks else ""
+        fcrop += _cut_lines(imp, "front") if cut_lines else ""
         bcrop = _crop_marks(imp, "back") if crop_marks else ""
         sheets.append(f'<section class="sheet front">{"".join(fronts)}{fcrop}</section>')
         sheets.append(f'<section class="sheet back">{"".join(backs)}{bcrop}</section>')
@@ -315,6 +335,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--offset-y", type=float, default=0.0)
     ap.add_argument("--bleed", action=argparse.BooleanOptionalAction, default=True, help="2mm bleed (default on)")
     ap.add_argument("--crop-marks", action=argparse.BooleanOptionalAction, default=True)
+    ap.add_argument("--cut-lines", action=argparse.BooleanOptionalAction, default=True,
+                    help="Dashed full-length cut lines through every trim line on the front sheet (default on)")
     ap.add_argument("--guides", action="store_true", help="Draw dashed rounded trim outlines (proofing only)")
     ap.add_argument("--calibrate", action="store_true", help="Emit a duplex calibration target instead of cards")
     ap.add_argument("--html-only", action="store_true", help="Skip PDF conversion")
@@ -343,7 +365,7 @@ def main(argv: list[str] | None = None) -> int:
         if not cards:
             print("error: no cards found in input", file=sys.stderr)
             return 2
-        html = build_sheets(cards, imp, a.mode, a.crop_marks, a.guides)
+        html = build_sheets(cards, imp, a.mode, a.crop_marks, a.guides, a.cut_lines)
         base = a.name or f"{safe_id(src.stem)}-{a.paper}-{a.per_page}up"
 
     html_path = out / f"{base}.html"

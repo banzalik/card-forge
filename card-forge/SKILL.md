@@ -45,6 +45,7 @@ skill's directory.
 | `--mode` | `batch`, `copies` | `batch`: one record per slot. `copies`: the first record fills the page |
 | `--flip` | `long-edge`, `short-edge` | must match the printer's duplex setting |
 | `--offset-x/-y` | mm | back-page calibration only; fronts never move |
+| `--cut-lines` / `--no-cut-lines` | on by default | dashed full-length cut lines on the front sheet |
 
 Run `python3 scripts/impose.py --paper letter --per-page 8 --flip long-edge` for exact slot
 coordinates. **Always pass any `warnings` it prints on to the user.** 10-up on Letter has
@@ -72,8 +73,10 @@ take the same options if you need only one stage.
 
 - **PDF:** fronts on odd pages, backs on even pages, with a page break after every sheet.
   Barcodes are inline vector SVG (`PDF417`, `QR`, `CODE128`). Crop marks are drawn on the
-  sheet perimeter, aligned to every trim line and kept outside the bleed. `--guides` adds
-  dashed rounded-corner trim outlines for proofing only.
+  sheet perimeter, aligned to every trim line and kept outside the bleed. The front sheet also
+  carries dashed cut lines that run the full width and height of the page through every trim
+  line (`--no-cut-lines` to drop them), so the next cut stays marked on each strip after the
+  first one. `--guides` adds dashed rounded-corner trim outlines for proofing only.
 - **Apple Wallet:** generic pass style, mapped as in `references/wallet-mapping.md`.
   `manifest.json` holds SHA-1 digests and `signature` is a detached PKCS#7 (DER) made with `openssl smime`.
 - **Google Wallet:** an RS256 `savetowallet` JWT that embeds both the generic class and the

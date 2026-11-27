@@ -270,8 +270,23 @@ function cropMarks(imp, which) {
   return out.join("");
 }
 
+/** Dashed full-length cut lines through every trim line; they survive on each strip after the first cuts. */
+function cutLines(imp, which) {
+  const { width_mm: pw, height_mm: ph } = imp.paper;
+  const xs = new Set(), ys = new Set();
+  for (const s of imp.slots) {
+    const p = s[which];
+    xs.add(r3(p.x_mm)); xs.add(r3(p.x_mm + CR80_W));
+    ys.add(r3(p.y_mm)); ys.add(r3(p.y_mm + CR80_H));
+  }
+  const lines = [];
+  for (const x of [...xs].sort((a, b) => a - b)) lines.push(`<line x1="${x.toFixed(3)}" y1="0" x2="${x.toFixed(3)}" y2="${ph}"/>`);
+  for (const y of [...ys].sort((a, b) => a - b)) lines.push(`<line x1="0" y1="${y.toFixed(3)}" x2="${pw}" y2="${y.toFixed(3)}"/>`);
+  return `<svg class="cutlines" xmlns="http://www.w3.org/2000/svg" width="${pw}mm" height="${ph}mm" viewBox="0 0 ${pw} ${ph}"><g fill="none" stroke="#8a8a8a" stroke-width="0.06" stroke-dasharray="1.2 1">${lines.join("")}</g></svg>`;
+}
+
 /** Returns an array of {side: "front"|"back", html} sheets (fronts on odd pages, backs on even). */
-export function buildSheets(cards, imp, { mode = "batch", cropMarks: crops = true, guides = false } = {}) {
+export function buildSheets(cards, imp, { mode = "batch", cropMarks: crops = true, guides = false, cutLines: cuts = true } = {}) {
   const { perPage, cols, rows } = imp.grid;
   const eff = imp.card.effectiveBleed_mm;
   const pages = mode === "copies" ? [Array(perPage).fill(cards[0])] : [];
@@ -286,7 +301,7 @@ export function buildSheets(cards, imp, { mode = "batch", cropMarks: crops = tru
       fr += slot(s.front.x_mm, s.front.y_mm, fb, frontHTML(card, fb), guides);
       bk += slot(s.back.x_mm, s.back.y_mm, bb, backHTML(card, bb), guides);
     });
-    sheets.push({ side: "front", html: fr + (crops ? cropMarks(imp, "front") : "") });
+    sheets.push({ side: "front", html: fr + (crops ? cropMarks(imp, "front") : "") + (cuts ? cutLines(imp, "front") : "") });
     sheets.push({ side: "back", html: bk + (crops ? cropMarks(imp, "back") : "") });
   }
   return sheets;

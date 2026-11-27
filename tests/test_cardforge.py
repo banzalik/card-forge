@@ -128,6 +128,18 @@ class RenderTests(unittest.TestCase):
         self.assertNotIn("<script>alert", html)
         self.assertIn("&lt;script&gt;", html)
 
+    def test_cut_lines_front_only_and_optional(self):
+        cards = [normalize(json.loads(SAMPLES[0].read_text()))]
+        imp = compute_imposition("letter", 8, "long-edge")
+        html = render.build_sheets(cards, imp, "copies", True, False)
+        front, back = html.split('class="sheet back"')
+        # 2 columns -> 4 vertical trim lines, 4 rows -> 8 horizontal trim lines, front sheet only
+        self.assertEqual(front.count('class="cutlines"'), 1)
+        self.assertEqual(front.count('y1="0"'), 4)
+        self.assertEqual(front.count('x1="0"'), 8)
+        self.assertNotIn('class="cutlines"', back)
+        self.assertNotIn('class="cutlines"', render.build_sheets(cards, imp, "copies", True, False, cut_lines=False))
+
     def test_cli_writes_html(self):
         with tempfile.TemporaryDirectory() as tmp:
             rc = quiet(render.main, [str(SAMPLES[0]), "--mode", "copies", "--html-only", "--out", tmp, "--name", "x"])

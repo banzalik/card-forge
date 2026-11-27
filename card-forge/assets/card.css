@@ -9,6 +9,9 @@ body { font-family: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Deja
 .trim { position: absolute; width: 85.6mm; height: 53.98mm; overflow: hidden; }
 .guide { position: absolute; width: 85.6mm; height: 53.98mm; border: 0.1mm dashed #f0f; border-radius: 3.18mm; pointer-events: none; }
 .crop { position: absolute; background: #000; }
+/* Full-length dashed cut lines through every trim line (front sheet). They only run along card
+   edges and through gutters, so they stay visible on every strip after the first cuts. */
+.cutlines { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
 .mono { font-family: "DejaVu Sans Mono", "Menlo", "Consolas", monospace; }
 .lbl { font-size: 4.3pt; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.65; line-height: 1.1; }
 .val { font-size: 6.2pt; font-weight: 600; line-height: 1.15; overflow-wrap: anywhere; }
